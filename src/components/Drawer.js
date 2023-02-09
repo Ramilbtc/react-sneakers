@@ -1,36 +1,26 @@
-function Drawer(props) {
+function Drawer({ onClose, items = [], onRemove }) {
     return (
     <div className="overlay">
         <div className="drawer">
             <h3 className="mb-30 d-flex justify-between">
                 Корзина 
-                <img onClick={props.onClose} className="removeBtn cu-p" src="/img/btn-remove.svg" alt="Remove"/>
+                <img onClick={onClose} className="removeBtn cu-p" src="/img/btn-remove.svg" alt="Remove"/>
             </h3>
 
             <div className="items">
-                <div className="cartItem d-flex align-center mb-20">
-                {/* <img className="mr-20" width={70} height={70} src="/img/sneakers/1.jpg" alt="Sneakers"/> */}
+                {items.map(obj => (
+                    <div className="cartItem d-flex align-center mb-20">
+                        <div style={{ backgroundImage: `url(${obj.imageUrl})` }} 
+                            className="cartItemImg">
+                        </div>
 
-                <div style={{ backgroundImage: 'url(/img/sneakers/1.jpg)' }} className="cartItemImg"></div>
-
-                <div className="mr-20 flex">
-                    <p className="mb-5">Мужские Кроссовки Nike Air Max 270</p>
-                    <b>12999 руб.</b>
-                </div>
-                <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove"/>
-                </div>
-
-                <div className="cartItem d-flex align-center mb-20">
-                {/* <img className="mr-20" width={70} height={70} src="/img/sneakers/1.jpg" alt="Sneakers"/> */}
-
-                <div style={{ backgroundImage: 'url(/img/sneakers/1.jpg)' }} className="cartItemImg"></div>
-
-                <div className="mr-20 flex">
-                    <p className="mb-5">Мужские Кроссовки Nike Air Max 270</p>
-                    <b>12999 руб.</b>
-                </div>
-                <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove"/>
-                </div>
+                        <div className="mr-20 flex">
+                            <p className="mb-5">{obj.title}</p>
+                            <b>{obj.price}</b>
+                        </div>
+                        <img className="removeBtn" onClick={() => onRemove(obj.id)} src="/img/btn-remove.svg" alt="Remove"/>
+                    </div>))
+                }
             </div>
 
             <div className="cartTotalBlock">
