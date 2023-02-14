@@ -13,6 +13,8 @@ function App() {
   const [searchValue, setSearchValue] = React.useState('')
   const [cartOpened, setCartOpened] = React.useState(false)
 
+  
+
   React.useEffect(() => {
     async function fetchData() {
       const cartResponce = await axios.get('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart')
