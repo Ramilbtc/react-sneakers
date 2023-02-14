@@ -26,8 +26,14 @@ function App() {
   }, [])
 
   const onAddToCart = (obj) => {
-    axios.post('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart', obj)
-    setCartItems(prev => [...prev, obj])
+    console.log(obj)
+    if (cartItems.find((item) => Number(item.id) === Number(obj.id))) {
+      axios.delete(`https://63e27ac7ad0093bf29d102bd.mockapi.io/cart/${obj.id}`)
+      setCartItems(prev => prev.filter(item => Number(item.id)!== Number(obj.id)))
+    } else {
+      axios.post('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart', obj)
+      setCartItems(prev => [...prev, obj])
+    }
   }
 
   const onAddToFavorite = async (obj) => {
@@ -60,7 +66,8 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home
-          items={items} 
+          items={items}
+          cartItems={cartItems} 
           searchValue={searchValue}
           setSearchValue={setSearchValue}
           onChangeSearchInput={onChangeSearchInput}
