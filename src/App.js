@@ -14,15 +14,17 @@ function App() {
   const [cartOpened, setCartOpened] = React.useState(false)
 
   React.useEffect(() => {
-    axios.get('https://63e27ac7ad0093bf29d102bd.mockapi.io/items').then(res => {
-      setItems(res.data)
-    })
-    axios.get('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart').then(res => {
-      setCartItems(res.data)
-    })
-    axios.get('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart').then(res => {
-      setFavorites(res.data)
-    })
+    async function fetchData() {
+      const cartResponce = await axios.get('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart')
+      const favoritesResponce = await axios.get('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart')
+      const itemsResponce = await axios.get('https://63e27ac7ad0093bf29d102bd.mockapi.io/items')
+
+      setCartItems(cartResponce.data)
+      setFavorites(favoritesResponce.data)
+      setItems(itemsResponce.data)
+    }
+
+    fetchData()
   }, [])
 
   const onAddToCart = (obj) => {
