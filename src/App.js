@@ -3,8 +3,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from 'axios';
 import Header from './components/Header'
 import Drawer from './components/Drawer';
+import AppContext from './pages/context';
+
 import Home from './pages/Home';
 import Favorites from './pages/Favorites';
+
 
 function App() {
   const [items, setItems] = React.useState([])
@@ -65,35 +68,36 @@ function App() {
     setSearchValue(event.target.value)
   }
 
+  const isItemAdded = (id) => {
+    return cartItems.some(obj => Number(obj.id) === Number(id))
+  }
+
   return (
-    <div className="wrapper clear">
-      {cartOpened && <Drawer onClose={() => setCartOpened(false)} items={cartItems} onRemove={onRemoveItem}/>}
-      <Header  onClickCart={() => setCartOpened(true)}/>
-      
+    <AppContext.Provider value={{ items, cartItems, favorites, isItemAdded }}>
+      <div className="wrapper clear">
+        {cartOpened && <Drawer onClose={() => setCartOpened(false)} items={cartItems} onRemove={onRemoveItem}/>}
+        <Header  onClickCart={() => setCartOpened(true)}/>
 
-      <Routes>
-        <Route path="/" element={<Home
-          items={items}
-          cartItems={cartItems} 
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
-          onChangeSearchInput={onChangeSearchInput}
-          onAddToFavorite={onAddToFavorite}
-          onAddToCart={onAddToCart}
-          onPlus={(obj) => onAddToCart(obj)} />}
-          isLoading={isLoading}
-        />
-        <Route path="/favorites" element={
-          <Favorites
-            items={favorites}
+        <Routes>
+          <Route path="/" element={<Home
+            items={items}
+            cartItems={cartItems} 
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            onChangeSearchInput={onChangeSearchInput}
             onAddToFavorite={onAddToFavorite}
-          />}
-        />
-      </Routes>
-
-
-      
-    </div>
+            onAddToCart={onAddToCart}
+            onPlus={(obj) => onAddToCart(obj)} />}
+            isLoading={isLoading}
+          />
+          <Route path="/favorites" element={
+            <Favorites
+              onAddToFavorite={onAddToFavorite}
+            />}
+          />
+        </Routes>
+      </div>
+    </AppContext.Provider>
   );
 }
 
