@@ -8,7 +8,6 @@ function Card({ id, onPlus, onFavorite, title, imageUrl, price, favorited = fals
 
     const onClickPlus = () => {
         onPlus({ id, title, imageUrl, price })
-        console.log(onPlus)
         setIsAdded(!isAdded)
     }
 
