@@ -4,6 +4,8 @@ import axios from 'axios'
 import AppContext from "../pages/context";
 import Info from "./info";
 
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
 function Drawer({ onClose, items = [], onRemove }) {
     const { cartItems, setCartItems } = React.useContext(AppContext)
     const [ orderId, setOrderId ] = React.useState(null)
@@ -12,13 +14,22 @@ function Drawer({ onClose, items = [], onRemove }) {
 
     const onClickOrder = async () => {
         try {
-            const {data} = await axios.post('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart', cartItems)
+            setIsLoading(true)
+            const {data} = await axios.post('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart', {items: cartItems})
             setOrderId(data.id)
+
+            for (let i = 0; i < cartItems; i++) {
+                const item = cartItems[i]
+                await axios.delete('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart' + item.id)
+                await delay(1000)
+            }
+
             setIsOrderComplete(true)
             setCartItems([])
         } catch (error) {
             alert('не удалось создать заказ!')
         }
+        setIsLoading(false)
     }
 
     return (
