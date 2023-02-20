@@ -3,7 +3,7 @@ import React from "react"
 import Card from "../components/Card"
 
 
-function Home({ items, searchValue, setSearchValue, onChangeSearchInput, onAddToFavorite, onPlus, cartItems, isLoading }) {
+function Home({ items, searchValue, setSearchValue, onChangeSearchInput, onAddToFavorite, onPlus, onAddToCart, isLoading }) {
 
     const renderItems = () => {
         const filtredItems = items.filter((item) => item.title.toLowerCase().includes(searchValue.toLowerCase()))
@@ -13,8 +13,8 @@ function Home({ items, searchValue, setSearchValue, onChangeSearchInput, onAddTo
                 favorited={false}
                 setSearchValue={setSearchValue}
                 onFavorite={onAddToFavorite}
-                onPlus={onPlus}
-                loading={isLoading}
+                onPlus={(obj) => onAddToCart(obj)}
+                loading={isLoading} 
                 {...item}
             />
         ))
