@@ -31,7 +31,9 @@ function Header(props) {
                     </Link>
                 </li>
                 <li className="mb-10 cu-p">
-                    <img width={18} height={18} src="/img/user.svg" alt="user"/>
+                    <Link to="/orders">
+                        <img width={18} height={18} src="/img/user.svg" alt="user"/>
+                    </Link>
                 </li>
             </ul>
         </header>

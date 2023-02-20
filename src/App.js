@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from 'axios';
 import Header from './components/Header'
-import Drawer from './components/Drawer';
+import Drawer from './components/Drawer/';
 import AppContext from './pages/context';
 
 import Home from './pages/Home';
@@ -21,23 +21,26 @@ function App() {
 
   React.useEffect(() => {
     async function fetchData() {
-      setIsLoading(true)
-      const cartResponce = await axios.get('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart')
-      const favoritesResponce = await axios.get('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart')
-      const itemsResponce = await axios.get('https://63e27ac7ad0093bf29d102bd.mockapi.io/items')
+      try {
+        setIsLoading(true)
+        const cartResponce = await axios.get('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart')
+        const favoritesResponce = await axios.get('https://63e27ac7ad0093bf29d102bd.mockapi.io/cart')
+        const itemsResponce = await axios.get('https://63e27ac7ad0093bf29d102bd.mockapi.io/items')
 
-      setIsLoading(false)
+        setIsLoading(false)
 
-      setCartItems(cartResponce.data)
-      setFavorites(favoritesResponce.data)
-      setItems(itemsResponce.data)
+        setCartItems(cartResponce.data)
+        setFavorites(favoritesResponce.data)
+        setItems(itemsResponce.data)
+      } catch (error) {
+        alert('Ошибка при запросе данных')
+      }
     }
 
     fetchData()
   }, [])
 
-  const onAddToCart = (obj) => {
-    console.log(obj)
+  const onAddToCart = async(obj) => {
     if (cartItems.find((item) => Number(item.id) === Number(obj.id))) {
       axios.delete(`https://63e27ac7ad0093bf29d102bd.mockapi.io/cart/${obj.id}`)
       setCartItems(prev => prev.filter(item => Number(item.id)!== Number(obj.id)))
@@ -75,9 +78,12 @@ function App() {
   }
 
   return (
-    <AppContext.Provider value={{ items, cartItems, favorites, isItemAdded, onAddToFavorite, setCartOpened, setCartItems }}>
+    <AppContext.Provider value={{ items, cartItems, favorites, isItemAdded, onAddToFavorite, onAddToCart, setCartOpened, setCartItems }}>
       <div className="wrapper clear">
-        {cartOpened && <Drawer onClose={() => setCartOpened(false)} items={cartItems} onRemove={onRemoveItem}/>}
+        <div>
+          <Drawer onClose={() => setCartOpened(false)} items={cartItems} onRemove={onRemoveItem} opened={cartOpened}/>
+        </div>
+
         <Header  onClickCart={() => setCartOpened(true)}/>
 
         <Routes>
